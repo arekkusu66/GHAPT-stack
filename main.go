@@ -9,16 +9,14 @@ import (
 )
 
 const (
-	staticDir   = "./static"
-	staticPath  = "/static/"
+	staticPath  = "/static"
 	portEnv     = "PORT"
 	defaultPort = "8080"
 )
 
-func serveStaticFiles(folder string) {
-	path := staticPath + folder + "/"
-	fileServer := http.FileServer(http.Dir(staticDir + "/" + folder))
-	http.Handle(path, http.StripPrefix(path, fileServer))
+func serveStaticFiles() {
+	fileServer := http.FileServer(http.Dir("." + staticPath))
+	http.Handle(staticPath + "/", http.StripPrefix(staticPath + "/", fileServer))
 }
 
 func getPort() string {
@@ -32,10 +30,7 @@ func getPort() string {
 func main() {
 	components.Routes()
 
-	serveStaticFiles("html")
-	serveStaticFiles("font")
-	serveStaticFiles("style")
-	serveStaticFiles("images")
+	serveStaticFiles()
 
 	port := getPort()
 	fmt.Printf("Listening on %s\n", port)
